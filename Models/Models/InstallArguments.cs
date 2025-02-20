@@ -11,6 +11,7 @@ namespace InstallerJazz.Models {
         public string VersionInfoURL { get; set; }
         public bool IsZipBall { get; set; } = true;
         public bool GithubMode { get; set; } = true;
+        public bool InstallDotNet { get; set; } = true;
         // How To Deal With Downloaded Files
         public bool EnableInstallFeature { get; set; } = true;
         public bool EnableUpdateFeature { get; set; } = false;

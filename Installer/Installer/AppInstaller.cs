@@ -1,17 +1,19 @@
 ﻿using InstallerJazz.Models;
 using InstallerJazz.FileUtils.SourceDownloader;
+using InstallerJazz.Installer;
 
 namespace InstallerJazz.Installer {
     public class AppInstaller {
 
         bool load = true;
 
-        public AppInstaller(InstallArguments InstallArguments) {
+        public AppInstaller(InstallArguments InstallArguments, bool OverrideDependencies = false) {
             SourceDownloader sourceDownloader = new SourceDownloader();
-
+            DotNetInstaller dotNetInstaller = new DotNetInstaller();
             Thread Loading = new Thread(new ThreadStart(RenderLoadingIcon));
             Loading.Start();
 
+            if(InstallArguments.InstallDotNet && !OverrideDependencies) dotNetInstaller.InstallDotNet();
             sourceDownloader.DownloadAndCopy(InstallArguments.SourceURL, InstallArguments.TargetLocation);
 
             load = false;

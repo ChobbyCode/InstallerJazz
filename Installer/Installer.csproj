@@ -13,8 +13,4 @@
     <ProjectReference Include="..\Updater\Updater.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DependenciesInstaller\" />
-  </ItemGroup>
-
 </Project>

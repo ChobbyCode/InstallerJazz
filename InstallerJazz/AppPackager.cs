@@ -6,6 +6,7 @@ namespace InstallerJazz {
     public class AppPackager {
 
         public AppPackager(string[] externalArguments, InstallArguments installArguments) {
+            Console.Title = installArguments.WindowName;
             List<string> appActions = new List<string>();
             if (installArguments.EnableInstallFeature) appActions.Add("Install");
             if (installArguments.EnableUninstallFeature) appActions.Add("Uninstall");
@@ -18,7 +19,8 @@ namespace InstallerJazz {
             }
             if (option == -1) throw new Exception();
 
-            if (installArguments.AllowUsersToChooseInstallDrive) installArguments.TargetLocation = GetNewInstallPath(installArguments.TargetLocation);
+            var changedPath = 0;
+            if (installArguments.AllowUsersToChooseInstallDrive) { installArguments.TargetLocation = GetNewInstallPath(installArguments.TargetLocation); changedPath = 1; }
 
             try {
                 switch (appActions[option].ToLower()) {
@@ -29,11 +31,14 @@ namespace InstallerJazz {
                     case "update":
                         Updater.AppUpdater appUpdater = new Updater.AppUpdater();
                         if(appUpdater.isUpdate(installArguments.VersionInfoURL, installArguments.AppVersion)) {
-                            AppInstaller appUpdateInstaller = new AppInstaller(installArguments); 
+                            AppInstaller appUpdateInstaller = new AppInstaller(installArguments, true); 
                         }
                         break;
                     case "uninstall":
-                        throw new NotImplementedException();
+                        AppUninstaller appUninstaller = new AppUninstaller();
+                        if(changedPath == 0) installArguments.TargetLocation = GetNewInstallPath(installArguments.TargetLocation);
+                        appUninstaller.Uninstall(installArguments.TargetLocation, installArguments.TargetLocation);
+                        break;
                 }
             }
             catch (Exception ex) {
@@ -55,10 +60,7 @@ namespace InstallerJazz {
 
             foreach (DriveInfo d in allDrives) {
                 Console.WriteLine("Drive {0}", d.Name);
-                Console.WriteLine("  Drive type: {0}", d.DriveType);
                 if (d.IsReady == true) {
-                    Console.WriteLine("  Volume label: {0}", d.VolumeLabel);
-                    Console.WriteLine("  File system: {0}", d.DriveFormat);
                     Console.WriteLine(
                         "  Available space to current user:{0, 15} bytes",
                         d.AvailableFreeSpace);
