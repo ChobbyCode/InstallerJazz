@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ConsoleUtils\ConsoleUtils.csproj" />
     <ProjectReference Include="..\FileUtils\FileUtils.csproj" />
-    <ProjectReference Include="..\InstallerJazz\InstallerJazz.csproj" />
+    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Updater\Updater.csproj" />
   </ItemGroup>
 
   <ItemGroup>
